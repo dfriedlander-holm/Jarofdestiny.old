@@ -1,24 +1,19 @@
-// List of names
-let names = [
-    {name: "Name 1", weight: 1},
-    {name: "Name 2", weight: 1},
-    {name: "Name 3", weight: 1},
-    {name: "Name 4", weight: 1},
-    {name: "Name 5", weight: 1},
-    {name: "Name 6", weight: 1},
-    {name: "Name 7", weight: 1},
-    {name: "Name 8", weight: 1},
-    {name: "Name 9", weight: 1}
-];
+let names = [];
 
-// Pick a name based on weight
-function pickName(index) {
-    const selectedName = names[index];
+// Function to pick a random name
+function pickName() {
+    // Get the values from input fields
+    names = [];
+    for (let i = 1; i <= 9; i++) {
+        let name = document.getElementById(`name${i}`).value;
+        if (name) {
+            names.push({ name: name, weight: 1 });
+        }
+    }
     
-    // Reduce the weight of the picked name and mark it as picked
-    if (selectedName.weight > 0) {
-        selectedName.weight = Math.max(selectedName.weight - 0.2, 0);
-        document.getElementById(`name${index + 1}`).classList.add('picked');
+    if (names.length === 0) {
+        alert('Please enter at least one name.');
+        return;
     }
 
     // Select the name randomly based on current weights
@@ -26,25 +21,27 @@ function pickName(index) {
     let random = Math.random() * totalWeight;
     let selected = null;
 
-    for (let name of names) {
-        if (random < name.weight) {
-            selected = name;
+    for (let nameObj of names) {
+        if (random < nameObj.weight) {
+            selected = nameObj;
             break;
         }
-        random -= name.weight;
+        random -= nameObj.weight;
     }
 
     if (selected) {
-        alert(`${selected.name} has been selected!`);
+        document.getElementById("pickedName").innerText = `Selected: ${selected.name}`;
+        selected.weight = Math.max(selected.weight - 0.2, 0);
     } else {
         alert('No names left to select.');
     }
 }
 
-// Reset all names
+// Reset picker
 function resetPicker() {
-    names = names.map(name => ({ ...name, weight: 1 }));
-    for (let i = 0; i < 9; i++) {
-        document.getElementById(`name${i + 1}`).classList.remove('picked');
+    for (let i = 1; i <= 9; i++) {
+        document.getElementById(`name${i}`).value = '';
     }
+    document.getElementById("pickedName").innerText = '';
+    names = [];
 }
