@@ -15,33 +15,13 @@ h1 {
     color: #333;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.name-btn {
-    padding: 20px;
-    background-color: #6ab7d6;
-    color: white;
-    font-size: 1.2rem;
-    border-radius: 10px;
-    border: none;
-    position: relative;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.name-btn small {
+#nameInputs input {
     display: block;
-    font-size: 0.8rem;
-    color: #f0f0f0;
-}
-
-.name-btn:hover {
-    background-color: #4a94b3;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 1rem;
+    width: 80%;
+    max-width: 300px;
 }
 
 button {
@@ -51,6 +31,7 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin: 10px 0;
 }
 
 button:hover {
@@ -75,4 +56,9 @@ button:hover {
     padding: 10px;
     margin: 5px 0;
     border-radius: 5px;
+}
+
+#reductionLabel {
+    font-weight: bold;
+    margin-left: 10px;
 }
