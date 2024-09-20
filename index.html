@@ -9,18 +9,32 @@
 <body>
     <div class="container">
         <h1>Random Name Picker</h1>
-        <div class="grid">
-            <div class="name" id="name1" onclick="pickName(0)">Name 1</div>
-            <div class="name" id="name2" onclick="pickName(1)">Name 2</div>
-            <div class="name" id="name3" onclick="pickName(2)">Name 3</div>
-            <div class="name" id="name4" onclick="pickName(3)">Name 4</div>
-            <div class="name" id="name5" onclick="pickName(4)">Name 5</div>
-            <div class="name" id="name6" onclick="pickName(5)">Name 6</div>
-            <div class="name" id="name7" onclick="pickName(6)">Name 7</div>
-            <div class="name" id="name8" onclick="pickName(7)">Name 8</div>
-            <div class="name" id="name9" onclick="pickName(8)">Name 9</div>
+
+        <!-- Slider for percentage reduction -->
+        <div class="percentage-reduction">
+            <label for="reduction">Set Percentage Reduction:</label>
+            <input type="range" id="reduction" min="0" max="100" value="75" oninput="updateReductionLabel(this.value)">
+            <span id="reductionLabel">75%</span>
         </div>
+
+        <!-- Name buttons in 3x3 grid -->
+        <div class="grid" id="nameButtons"></div>
+
+        <!-- Button to pick a random name -->
+        <button id="pickButton" onclick="pickRandomName()">Pick Random Name</button>
+
+        <!-- List of last 3 people picked -->
+        <div class="picked-list">
+            <h3>Last 3 People Picked:</h3>
+            <ul id="lastPickedList"></ul>
+        </div>
+
+        <!-- Reset button -->
         <button onclick="resetPicker()">Reset</button>
+
+        <div class="picked-result">
+            <p id="pickedName"></p>
+        </div>
     </div>
 
     <script src="script.js"></script>
