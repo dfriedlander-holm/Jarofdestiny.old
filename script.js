@@ -5,21 +5,10 @@ let lastPicked = [];
 window.onload = function() {
     if (localStorage.getItem('names')) {
         names = JSON.parse(localStorage.getItem('names'));
+        loadNamesToFields();
     } else {
-        names = [
-            { name: 'Name 1', weight: 1 },
-            { name: 'Name 2', weight: 1 },
-            { name: 'Name 3', weight: 1 },
-            { name: 'Name 4', weight: 1 },
-            { name: 'Name 5', weight: 1 },
-            { name: 'Name 6', weight: 1 },
-            { name: 'Name 7', weight: 1 },
-            { name: 'Name 8', weight: 1 },
-            { name: 'Name 9', weight: 1 }
-        ];
-        localStorage.setItem('names', JSON.stringify(names));
+        resetNames();
     }
-    updateButtons();
     updateLastPickedList();
 };
 
@@ -28,22 +17,33 @@ function updateReductionLabel(value) {
     document.getElementById('reductionLabel').innerText = `${value}%`;
 }
 
-// Function to update button labels with stored names
-function updateButtons() {
-    const grid = document.getElementById("nameButtons");
-    grid.innerHTML = '';  // Clear previous buttons
+// Function to save names entered by the user
+function saveNames() {
+    names = [];
+    for (let i = 1; i <= 9; i++) {
+        const name = document.getElementById(`name${i}`).value.trim();
+        if (name) {
+            names.push({ name: name, weight: 1 });
+        }
+    }
+    localStorage.setItem('names', JSON.stringify(names));
+    alert('Names saved!');
+}
 
+// Function to load saved names back into input fields
+function loadNamesToFields() {
     names.forEach((nameObj, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'name-btn';
-        btn.innerHTML = `${nameObj.name} <small>Weight: ${nameObj.weight.toFixed(2)}</small>`;
-        btn.onclick = () => pickName(index);
-        grid.appendChild(btn);
+        document.getElementById(`name${index + 1}`).value = nameObj.name;
     });
 }
 
 // Pick a random name based on weights
 function pickRandomName() {
+    if (names.length === 0) {
+        alert('No names saved. Please enter and save names first.');
+        return;
+    }
+
     let totalWeight = names.reduce((sum, nameObj) => sum + nameObj.weight, 0);
     let random = Math.random() * totalWeight;
     let reductionPercentage = document.getElementById("reduction").value;
@@ -55,7 +55,6 @@ function pickRandomName() {
             nameObj.weight = nameObj.weight * reductionFactor;  // Apply user-defined reduction
             addToLastPicked(nameObj.name);
             localStorage.setItem('names', JSON.stringify(names));  // Save the updated weights
-            updateButtons();  // Update the buttons with new weights
             return;
         }
         random -= nameObj.weight;
@@ -83,8 +82,8 @@ function updateLastPickedList() {
     });
 }
 
-// Reset picker and restore default names
-function resetPicker() {
+// Reset names and weights
+function resetNames() {
     names = [
         { name: 'Name 1', weight: 1 },
         { name: 'Name 2', weight: 1 },
@@ -96,9 +95,14 @@ function resetPicker() {
         { name: 'Name 8', weight: 1 },
         { name: 'Name 9', weight: 1 }
     ];
-    lastPicked = [];
     localStorage.setItem('names', JSON.stringify(names));  // Reset localStorage
-    updateButtons();
+    loadNamesToFields();
+}
+
+// Reset picker and restore default names
+function resetPicker() {
+    resetNames();
+    lastPicked = [];
     updateLastPickedList();
     document.getElementById("pickedName").innerText = '';
 }
