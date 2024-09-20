@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Random Name Picker</h1>
-        
+
         <!-- Name buttons -->
         <div class="name-buttons" id="nameButtons">
             <button class="name-btn" onclick="pickName(0)">Name 1</button>
@@ -23,9 +23,15 @@
             <button class="name-btn" onclick="pickName(8)">Name 9</button>
         </div>
 
+        <!-- Percentage Reduction Field -->
+        <div class="percentage-reduction">
+            <label for="reductionPercentage">Percentage Reduction:</label>
+            <input type="number" id="reductionPercentage" value="75" min="1" max="100">%
+        </div>
+
         <!-- Button to pick a random name -->
         <button id="pickButton" onclick="pickRandomName()">Pick Random Name</button>
-        
+
         <div class="picked-result">
             <p id="pickedName"></p>
         </div>
