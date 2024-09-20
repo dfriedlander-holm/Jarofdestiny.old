@@ -1,50 +1,78 @@
-// List of names
-let names = [
-    {name: "Name 1", weight: 1},
-    {name: "Name 2", weight: 1},
-    {name: "Name 3", weight: 1},
-    {name: "Name 4", weight: 1},
-    {name: "Name 5", weight: 1},
-    {name: "Name 6", weight: 1},
-    {name: "Name 7", weight: 1},
-    {name: "Name 8", weight: 1},
-    {name: "Name 9", weight: 1}
-];
-
-// Pick a name based on weight
-function pickName(index) {
-    const selectedName = names[index];
-    
-    // Reduce the weight of the picked name and mark it as picked
-    if (selectedName.weight > 0) {
-        selectedName.weight = Math.max(selectedName.weight - 0.2, 0);
-        document.getElementById(`name${index + 1}`).classList.add('picked');
-    }
-
-    // Select the name randomly based on current weights
-    let totalWeight = names.reduce((sum, name) => sum + name.weight, 0);
-    let random = Math.random() * totalWeight;
-    let selected = null;
-
-    for (let name of names) {
-        if (random < name.weight) {
-            selected = name;
-            break;
-        }
-        random -= name.weight;
-    }
-
-    if (selected) {
-        alert(`${selected.name} has been selected!`);
-    } else {
-        alert('No names left to select.');
-    }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
 }
 
-// Reset all names
-function resetPicker() {
-    names = names.map(name => ({ ...name, weight: 1 }));
-    for (let i = 0; i < 9; i++) {
-        document.getElementById(`name${i + 1}`).classList.remove('picked');
-    }
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+
+h1 {
+    color: #333;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.name-btn {
+    padding: 20px;
+    background-color: #6ab7d6;
+    color: white;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.name-btn small {
+    display: block;
+    font-size: 0.8rem;
+    color: #f0f0f0;
+}
+
+.name-btn:hover {
+    background-color: #4a94b3;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.percentage-reduction {
+    margin-bottom: 20px;
+}
+
+.picked-list {
+    margin-top: 20px;
+}
+
+.picked-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.picked-list li {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
 }
