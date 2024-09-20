@@ -1,78 +1,104 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    text-align: center;
-    margin: 0;
-    padding: 20px;
+let names = [];
+let lastPicked = [];
+
+// Load names from localStorage or set default names
+window.onload = function() {
+    if (localStorage.getItem('names')) {
+        names = JSON.parse(localStorage.getItem('names'));
+    } else {
+        names = [
+            { name: 'Name 1', weight: 1 },
+            { name: 'Name 2', weight: 1 },
+            { name: 'Name 3', weight: 1 },
+            { name: 'Name 4', weight: 1 },
+            { name: 'Name 5', weight: 1 },
+            { name: 'Name 6', weight: 1 },
+            { name: 'Name 7', weight: 1 },
+            { name: 'Name 8', weight: 1 },
+            { name: 'Name 9', weight: 1 }
+        ];
+        localStorage.setItem('names', JSON.stringify(names));
+    }
+    updateButtons();
+    updateLastPickedList();
+};
+
+// Update the reduction percentage label
+function updateReductionLabel(value) {
+    document.getElementById('reductionLabel').innerText = `${value}%`;
 }
 
-.container {
-    max-width: 600px;
-    margin: auto;
+// Function to update button labels with stored names
+function updateButtons() {
+    const grid = document.getElementById("nameButtons");
+    grid.innerHTML = '';  // Clear previous buttons
+
+    names.forEach((nameObj, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'name-btn';
+        btn.innerHTML = `${nameObj.name} <small>Weight: ${nameObj.weight.toFixed(2)}</small>`;
+        btn.onclick = () => pickName(index);
+        grid.appendChild(btn);
+    });
 }
 
-h1 {
-    color: #333;
+// Pick a random name based on weights
+function pickRandomName() {
+    let totalWeight = names.reduce((sum, nameObj) => sum + nameObj.weight, 0);
+    let random = Math.random() * totalWeight;
+    let reductionPercentage = document.getElementById("reduction").value;
+    let reductionFactor = 1 - (reductionPercentage / 100); // Convert percentage to reduction factor
+
+    for (let nameObj of names) {
+        if (random < nameObj.weight) {
+            document.getElementById("pickedName").innerText = `Selected: ${nameObj.name}`;
+            nameObj.weight = nameObj.weight * reductionFactor;  // Apply user-defined reduction
+            addToLastPicked(nameObj.name);
+            localStorage.setItem('names', JSON.stringify(names));  // Save the updated weights
+            updateButtons();  // Update the buttons with new weights
+            return;
+        }
+        random -= nameObj.weight;
+    }
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
+// Add picked name to the last picked list (up to 3 entries)
+function addToLastPicked(name) {
+    lastPicked.unshift(name);  // Add name to the beginning
+    if (lastPicked.length > 3) {
+        lastPicked.pop();  // Remove the oldest entry if more than 3
+    }
+    updateLastPickedList();
 }
 
-.name-btn {
-    padding: 20px;
-    background-color: #6ab7d6;
-    color: white;
-    font-size: 1.2rem;
-    border-radius: 10px;
-    border: none;
-    position: relative;
-    cursor: pointer;
-    transition: background-color 0.3s;
+// Update the last picked names list
+function updateLastPickedList() {
+    const list = document.getElementById('lastPickedList');
+    list.innerHTML = '';  // Clear previous list
+
+    lastPicked.forEach(pickedName => {
+        const li = document.createElement('li');
+        li.innerText = pickedName;
+        list.appendChild(li);
+    });
 }
 
-.name-btn small {
-    display: block;
-    font-size: 0.8rem;
-    color: #f0f0f0;
-}
-
-.name-btn:hover {
-    background-color: #4a94b3;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-.percentage-reduction {
-    margin-bottom: 20px;
-}
-
-.picked-list {
-    margin-top: 20px;
-}
-
-.picked-list ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.picked-list li {
-    background-color: #f0f0f0;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
+// Reset picker and restore default names
+function resetPicker() {
+    names = [
+        { name: 'Name 1', weight: 1 },
+        { name: 'Name 2', weight: 1 },
+        { name: 'Name 3', weight: 1 },
+        { name: 'Name 4', weight: 1 },
+        { name: 'Name 5', weight: 1 },
+        { name: 'Name 6', weight: 1 },
+        { name: 'Name 7', weight: 1 },
+        { name: 'Name 8', weight: 1 },
+        { name: 'Name 9', weight: 1 }
+    ];
+    lastPicked = [];
+    localStorage.setItem('names', JSON.stringify(names));  // Reset localStorage
+    updateButtons();
+    updateLastPickedList();
+    document.getElementById("pickedName").innerText = '';
 }
