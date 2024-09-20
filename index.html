@@ -9,17 +9,27 @@
 <body>
     <div class="container">
         <h1>Random Name Picker</h1>
-        <div class="grid">
-            <div class="name" id="name1" onclick="pickName(0)">Name 1</div>
-            <div class="name" id="name2" onclick="pickName(1)">Name 2</div>
-            <div class="name" id="name3" onclick="pickName(2)">Name 3</div>
-            <div class="name" id="name4" onclick="pickName(3)">Name 4</div>
-            <div class="name" id="name5" onclick="pickName(4)">Name 5</div>
-            <div class="name" id="name6" onclick="pickName(5)">Name 6</div>
-            <div class="name" id="name7" onclick="pickName(6)">Name 7</div>
-            <div class="name" id="name8" onclick="pickName(7)">Name 8</div>
-            <div class="name" id="name9" onclick="pickName(8)">Name 9</div>
+        
+        <!-- Name buttons -->
+        <div class="name-buttons" id="nameButtons">
+            <button class="name-btn" onclick="pickName(0)">Name 1</button>
+            <button class="name-btn" onclick="pickName(1)">Name 2</button>
+            <button class="name-btn" onclick="pickName(2)">Name 3</button>
+            <button class="name-btn" onclick="pickName(3)">Name 4</button>
+            <button class="name-btn" onclick="pickName(4)">Name 5</button>
+            <button class="name-btn" onclick="pickName(5)">Name 6</button>
+            <button class="name-btn" onclick="pickName(6)">Name 7</button>
+            <button class="name-btn" onclick="pickName(7)">Name 8</button>
+            <button class="name-btn" onclick="pickName(8)">Name 9</button>
         </div>
+
+        <!-- Button to pick a random name -->
+        <button id="pickButton" onclick="pickRandomName()">Pick Random Name</button>
+        
+        <div class="picked-result">
+            <p id="pickedName"></p>
+        </div>
+
         <button onclick="resetPicker()">Reset</button>
     </div>
 
