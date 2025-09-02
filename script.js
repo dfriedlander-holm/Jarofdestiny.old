@@ -5,9 +5,13 @@ let allPicked = [];
 window.onload = function() {
     if (localStorage.getItem('names')) {
         names = JSON.parse(localStorage.getItem('names'));
+        loadNamesToInputs();
         loadNamesToGrid();
     } else {
         resetNames();
+    }
+    if (localStorage.getItem('allPicked')) {
+        allPicked = JSON.parse(localStorage.getItem('allPicked'));
     }
     updateAllPickedList();
 };
@@ -20,21 +24,54 @@ function updateReductionLabel(value) {
 // Function to save names entered by the user
 function saveNames() {
     names = [];
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 1; i <= 10; i++) {
         const name = document.getElementById(`name${i}`).value.trim();
         if (name) {
             names.push({ name: name, weight: 1 });
         }
     }
+    
+    if (names.length === 0) {
+        alert('Please enter at least one name before saving.');
+        return;
+    }
+    
     localStorage.setItem('names', JSON.stringify(names));
     loadNamesToGrid();  // Load names into grid
-    alert('Names saved!');
+    alert(`${names.length} names saved successfully!`);
 }
 
-// Load saved names into the 3x3 grid with their weights
+// Load saved names into the input fields
+function loadNamesToInputs() {
+    // Clear all inputs first
+    for (let i = 1; i <= 10; i++) {
+        document.getElementById(`name${i}`).value = '';
+    }
+    
+    // Load saved names into inputs
+    names.forEach((nameObj, index) => {
+        if (index < 10) {
+            document.getElementById(`name${index + 1}`).value = nameObj.name;
+        }
+    });
+}
+
+// Load saved names into the display grid with their weights
 function loadNamesToGrid() {
     const grid = document.getElementById('nameGrid');
     grid.innerHTML = '';  // Clear the grid
+
+    if (names.length === 0) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'empty-message';
+        emptyMessage.innerHTML = '<p>Enter names above and click "Save Names" to get started!</p>';
+        emptyMessage.style.gridColumn = '1 / -1';
+        emptyMessage.style.textAlign = 'center';
+        emptyMessage.style.padding = '20px';
+        emptyMessage.style.color = '#666';
+        grid.appendChild(emptyMessage);
+        return;
+    }
 
     names.forEach((nameObj, index) => {
         const nameBox = document.createElement('div');
@@ -72,6 +109,7 @@ function pickRandomName() {
 // Add picked name to the all picked list
 function addToAllPicked(name) {
     allPicked.push(name);  // Add name to the end of the list
+    localStorage.setItem('allPicked', JSON.stringify(allPicked));  // Save to localStorage
     updateAllPickedList();
 }
 
@@ -89,17 +127,11 @@ function updateAllPickedList() {
 
 // Reset names and weights
 function resetNames() {
-    names = [
-        { name: 'Name 1', weight: 1 },
-        { name: 'Name 2', weight: 1 },
-        { name: 'Name 3', weight: 1 },
-        { name: 'Name 4', weight: 1 },
-        { name: 'Name 5', weight: 1 },
-        { name: 'Name 6', weight: 1 },
-        { name: 'Name 7', weight: 1 },
-        { name: 'Name 8', weight: 1 },
-        { name: 'Name 9', weight: 1 }
-    ];
+    names = [];
+    // Clear input fields
+    for (let i = 1; i <= 10; i++) {
+        document.getElementById(`name${i}`).value = '';
+    }
     localStorage.setItem('names', JSON.stringify(names));  // Reset localStorage
     loadNamesToGrid();
 }
@@ -108,6 +140,7 @@ function resetNames() {
 function resetPicker() {
     resetNames();
     allPicked = [];
+    localStorage.setItem('allPicked', JSON.stringify(allPicked));  // Clear localStorage
     updateAllPickedList();
     document.getElementById("pickedName").innerText = '';
 }

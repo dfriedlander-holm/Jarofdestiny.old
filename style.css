@@ -15,27 +15,61 @@ h1 {
     color: #333;
 }
 
-.grid {
+.input-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
     margin-bottom: 20px;
 }
 
-.grid .name-box {
-    padding: 20px;
+.input-grid input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.input-grid input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+.name-inputs {
+    margin-bottom: 20px;
+}
+
+.name-inputs h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.display-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.display-grid .name-box {
+    padding: 15px;
     background-color: #6ab7d6;
     color: white;
     border-radius: 10px;
     position: relative;
     text-align: center;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.grid .name-box small {
+.display-grid .name-box small {
     display: block;
     font-size: 0.8rem;
     color: #f0f0f0;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 button {
