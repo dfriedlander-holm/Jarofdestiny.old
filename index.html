@@ -17,11 +17,28 @@
             <span id="reductionLabel">75%</span>
         </div>
 
-        <!-- 3x3 grid for names and weights -->
-        <div class="grid" id="nameGrid"></div>
+        <!-- Input fields for entering names -->
+        <div class="name-inputs">
+            <h3>Enter 10 Names:</h3>
+            <div class="input-grid">
+                <input type="text" id="name1" placeholder="Person 1" maxlength="20">
+                <input type="text" id="name2" placeholder="Person 2" maxlength="20">
+                <input type="text" id="name3" placeholder="Person 3" maxlength="20">
+                <input type="text" id="name4" placeholder="Person 4" maxlength="20">
+                <input type="text" id="name5" placeholder="Person 5" maxlength="20">
+                <input type="text" id="name6" placeholder="Person 6" maxlength="20">
+                <input type="text" id="name7" placeholder="Person 7" maxlength="20">
+                <input type="text" id="name8" placeholder="Person 8" maxlength="20">
+                <input type="text" id="name9" placeholder="Person 9" maxlength="20">
+                <input type="text" id="name10" placeholder="Person 10" maxlength="20">
+            </div>
+        </div>
 
         <!-- Save names button -->
         <button onclick="saveNames()">Save Names</button>
+
+        <!-- Display grid for names and weights -->
+        <div class="display-grid" id="nameGrid"></div>
 
         <!-- Button to pick a random name -->
         <button id="pickButton" onclick="pickRandomName()">Pick Random Name</button>
