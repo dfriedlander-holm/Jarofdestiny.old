@@ -144,3 +144,91 @@ function resetPicker() {
     updateAllPickedList();
     document.getElementById("pickedName").innerText = '';
 }
+
+// Statistical analysis function - runs 1000 picks and shows distribution
+function runStatisticalAnalysis() {
+    if (names.length === 0) {
+        alert('No names saved. Please enter and save names first.');
+        return;
+    }
+
+    // Store original weights to restore later
+    const originalWeights = names.map(nameObj => ({ ...nameObj }));
+    
+    // Reset weights to 1 for the test
+    names.forEach(nameObj => nameObj.weight = 1);
+    
+    const results = {};
+    const totalRuns = 1000;
+    
+    // Initialize results object
+    names.forEach(nameObj => {
+        results[nameObj.name] = 0;
+    });
+    
+    // Run 1000 picks
+    for (let i = 0; i < totalRuns; i++) {
+        const pickedName = simulateRandomPick();
+        results[pickedName]++;
+    }
+    
+    // Calculate statistics
+    const expectedPerPerson = totalRuns / names.length;
+    let output = `Statistical Analysis Results (${totalRuns} runs):\n\n`;
+    output += `Expected picks per person: ${expectedPerPerson.toFixed(1)}\n\n`;
+    output += `Results:\n`;
+    output += `Name              Picks    Percentage   Deviation\n`;
+    output += `------------------------------------------------\n`;
+    
+    let totalDeviation = 0;
+    for (const [name, picks] of Object.entries(results)) {
+        const percentage = (picks / totalRuns * 100).toFixed(1);
+        const deviation = picks - expectedPerPerson;
+        const deviationStr = deviation >= 0 ? `+${deviation.toFixed(1)}` : deviation.toFixed(1);
+        totalDeviation += Math.abs(deviation);
+        
+        output += `${name.padEnd(16)} ${picks.toString().padStart(5)}    ${percentage.padStart(6)}%     ${deviationStr}\n`;
+    }
+    
+    output += `------------------------------------------------\n`;
+    output += `Total absolute deviation: ${totalDeviation.toFixed(1)}\n`;
+    output += `Average deviation per person: ${(totalDeviation / names.length).toFixed(1)}\n\n`;
+    
+    // Assess randomness
+    const avgDeviation = totalDeviation / names.length;
+    if (avgDeviation < expectedPerPerson * 0.1) {
+        output += `✅ RESULT: Excellent randomness (avg deviation < 10% of expected)\n`;
+    } else if (avgDeviation < expectedPerPerson * 0.2) {
+        output += `✅ RESULT: Good randomness (avg deviation < 20% of expected)\n`;
+    } else {
+        output += `⚠️  RESULT: Moderate randomness (avg deviation >= 20% of expected)\n`;
+    }
+    
+    output += `\nNote: With truly random distribution, we expect some variation.\n`;
+    output += `Small deviations are normal and expected in random sampling.`;
+    
+    // Display results
+    document.getElementById('analysisResults').textContent = output;
+    
+    // Restore original weights
+    names.length = 0;
+    names.push(...originalWeights);
+    localStorage.setItem('names', JSON.stringify(names));
+    loadNamesToGrid();
+}
+
+// Helper function to simulate a single random pick without side effects
+function simulateRandomPick() {
+    let totalWeight = names.reduce((sum, nameObj) => sum + nameObj.weight, 0);
+    let random = Math.random() * totalWeight;
+    
+    for (let nameObj of names) {
+        if (random < nameObj.weight) {
+            return nameObj.name;
+        }
+        random -= nameObj.weight;
+    }
+    
+    // Fallback (should never reach here)
+    return names[0].name;
+}
